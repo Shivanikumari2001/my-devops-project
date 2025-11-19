@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: api-gateway
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/Shivanikumari2001/my-devops-project.git
+    targetRevision: HEAD
+    path: api-gateway/helm
+    helm:
+      valueFiles:
+        - values.yaml
+  destination:
+    # Update this to point to API Gateway's Kubernetes cluster/VM
+    # For same cluster: https://kubernetes.default.svc
+    # For different cluster: https://api-gateway-cluster.example.com:6443
+    server: https://kubernetes.default.svc
+    namespace: default  # Or api-gateway-specific namespace
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+

@@ -1,0 +1,21 @@
+# Exclude development files
+node_modules/
+dist/
+src/
+*.db
+*.sqlite
+*.sqlite3
+.git/
+.env
+.env.local
+*.log
+.DS_Store
+coverage/
+.vscode/
+.idea/
+*.md
+Dockerfile
+deploy.sh
+tsconfig.json
+nest-cli.json
+package-lock.json

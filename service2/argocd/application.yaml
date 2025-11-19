@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: service2
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/Shivanikumari2001/my-devops-project.git
+    targetRevision: HEAD
+    path: service2/helm
+    helm:
+      valueFiles:
+        - values.yaml
+  destination:
+    # Update this to point to Service2's Kubernetes cluster/VM
+    # For same cluster: https://kubernetes.default.svc
+    # For different cluster: https://service2-cluster.example.com:6443
+    server: https://kubernetes.default.svc
+    namespace: default  # Or service2-specific namespace
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+
