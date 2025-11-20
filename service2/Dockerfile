@@ -5,7 +5,9 @@ RUN apk add --no-cache openssl openssl-dev
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm ci
+RUN npm --version && \
+    ls -la package*.json && \
+    npm ci --no-audit --no-fund || (echo "npm ci failed, trying npm install" && npm install --no-audit --no-fund)
 
 COPY . .
 RUN npx prisma generate

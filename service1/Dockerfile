@@ -5,7 +5,9 @@ RUN apk add --no-cache openssl openssl-dev
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm ci
+RUN npm --version && \
+    ls -la package*.json && \
+    npm ci --no-audit --no-fund || (echo "npm ci failed, trying npm install" && npm install --no-audit --no-fund)
 
 COPY . .
 RUN npx prisma generate
@@ -27,7 +29,7 @@ COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/dist ./dist
 
 # Install only production dependencies (this will compile bcrypt for the target platform)
-RUN npm ci --only=production && npm cache clean --force
+RUN npm ci --only=production --no-audit --no-fund && npm cache clean --force
 
 # Regenerate Prisma client for the target platform
 RUN npx prisma generate
