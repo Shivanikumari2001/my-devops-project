@@ -29,6 +29,10 @@ export class AppService {
         path = path.replace('/api/service1', '');
       } else if (path.startsWith(`/api/service2/`)) {
         path = path.replace('/api/service2', '');
+      } else if (path === '/service1' || path.startsWith('/service1/')) {
+        path = path.replace('/service1', '') || '/';
+      } else if (path === '/service2' || path.startsWith('/service2/')) {
+        path = path.replace('/service2', '') || '/';
       } else if (path.startsWith('/api/')) {
         path = path.replace('/api/', '').replace(serviceName, '');
         if (!path.startsWith('/')) path = '/' + path;

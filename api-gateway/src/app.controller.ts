@@ -46,5 +46,26 @@ export class AppController {
   async proxyService2(@Req() req: Request, @Res() res: Response) {
     return this.appService.proxyRequest('service2', req, res);
   }
+
+  // Direct service routes (without /api prefix)
+  @All('service1')
+  async proxyService1Root(@Req() req: Request, @Res() res: Response) {
+    return this.appService.proxyRequest('service1', req, res);
+  }
+
+  @All('service1/*')
+  async proxyService1Direct(@Req() req: Request, @Res() res: Response) {
+    return this.appService.proxyRequest('service1', req, res);
+  }
+
+  @All('service2')
+  async proxyService2Root(@Req() req: Request, @Res() res: Response) {
+    return this.appService.proxyRequest('service2', req, res);
+  }
+
+  @All('service2/*')
+  async proxyService2Direct(@Req() req: Request, @Res() res: Response) {
+    return this.appService.proxyRequest('service2', req, res);
+  }
 }
 
