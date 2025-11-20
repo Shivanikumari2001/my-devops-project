@@ -20,15 +20,19 @@ test:
   image: node:20-alpine
   before_script:
     - apk add --no-cache openssl
-    - cd service1
-    - pwd
-    - ls -la
-    - npm ci --no-audit --no-fund
-    - npx prisma generate
   script:
-    - cd service1
-    - npm run lint
-    - npm run test
+    - |
+      cd service1 || exit 1
+      pwd
+      ls -la
+      if [ ! -f "package-lock.json" ]; then
+        echo "ERROR: package-lock.json not found in service1 directory"
+        exit 1
+      fi
+      npm ci --no-audit --no-fund
+      npx prisma generate
+      npm run lint
+      npm run test
   only:
     - merge_requests
     - main
@@ -55,10 +59,8 @@ build:
     - export IMAGE_TAG=${CI_COMMIT_SHORT_SHA:-latest}
     - export FULL_IMAGE_NAME=${IMAGE_REGISTRY}${IMAGE_NAME}:${IMAGE_TAG}
     - echo "Building Docker image: $FULL_IMAGE_NAME"
-    - |
-      if [ ! -f "Dockerfile" ]; then
-        cd service1 || exit 1
-      fi
+    - cd service1 || exit 1
+    - ls -la
     - docker build -t $FULL_IMAGE_NAME .
     - docker tag $FULL_IMAGE_NAME ${IMAGE_REGISTRY}${IMAGE_NAME}:latest
     - docker push $FULL_IMAGE_NAME
