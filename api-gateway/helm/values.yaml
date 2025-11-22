@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: wrakash/sky-gateway
-  pullPolicy: IfNotPresent
+  pullPolicy:  Always
   tag: "1.0.0"
   # repository: api-gateway
   # tag: "latest"
@@ -67,7 +67,4 @@ env:
   - name: SERVICE1_URL
     value: "http://service1:3001"
   - name: SERVICE2_URL
-    value: "http://service2:3002"
-
-
-
+    value: "http://se
